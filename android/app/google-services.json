@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "822926761732",
+    "project_id": "agriguide-ai-cd650",
+    "storage_bucket": "agriguide-ai-cd650.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822926761732:android:5b83f74e19fefa1e817a51",
+        "android_client_info": {
+          "package_name": "com.example.agriguide_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2GJc9J-OvHizJOuY2xDm8GcuvHe3a8gc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

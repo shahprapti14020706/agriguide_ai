@@ -1,0 +1,130 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function ownsUserDocument(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function documentIdMatchesData(documentId) {
+      return !('id' in request.resource.data) ||
+        request.resource.data.id == documentId;
+    }
+
+    function userIdMatchesData(userId) {
+      return !('userId' in request.resource.data) ||
+        request.resource.data.userId == userId;
+    }
+
+    match /users/{userId} {
+      allow read, delete: if ownsUserDocument(userId);
+      allow create, update: if ownsUserDocument(userId) &&
+        documentIdMatchesData(userId);
+
+      match /crops/{cropId} {
+        allow read, delete: if ownsUserDocument(userId);
+        allow create, update: if ownsUserDocument(userId) &&
+          documentIdMatchesData(cropId) &&
+          userIdMatchesData(userId);
+      }
+
+      match /chatHistory/{chatId}/messages/{messageId} {
+        allow read, delete: if ownsUserDocument(userId);
+        allow create, update: if ownsUserDocument(userId) &&
+          documentIdMatchesData(messageId) &&
+          userIdMatchesData(userId);
+      }
+
+      match /diseaseReports/{reportId} {
+        allow read, delete: if ownsUserDocument(userId);
+        allow create, update: if ownsUserDocument(userId) &&
+          documentIdMatchesData(reportId) &&
+          userIdMatchesData(userId);
+      }
+
+      match /weatherData/{weatherId} {
+        allow read, delete: if ownsUserDocument(userId);
+        allow create, update: if ownsUserDocument(userId) &&
+          documentIdMatchesData(weatherId) &&
+          userIdMatchesData(userId);
+      }
+
+      match /reminders/{reminderId} {
+        allow read, delete: if ownsUserDocument(userId);
+        allow create, update: if ownsUserDocument(userId) &&
+          documentIdMatchesData(reminderId) &&
+          userIdMatchesData(userId);
+      }
+
+      match /notifications/{notificationId} {
+        allow read, delete: if ownsUserDocument(userId);
+        allow create, update: if ownsUserDocument(userId) &&
+          documentIdMatchesData(notificationId) &&
+          userIdMatchesData(userId);
+      }
+
+      match /farmHistory/{historyId} {
+        allow read, delete: if ownsUserDocument(userId);
+        allow create, update: if ownsUserDocument(userId) &&
+          documentIdMatchesData(historyId) &&
+          userIdMatchesData(userId);
+      }
+
+      match /farmActivities/{activityId} {
+        allow read, delete: if ownsUserDocument(userId);
+        allow create, update: if ownsUserDocument(userId) &&
+          documentIdMatchesData(activityId) &&
+          userIdMatchesData(userId);
+      }
+
+      match /cropImages/{imageId} {
+        allow read, delete: if ownsUserDocument(userId);
+        allow create, update: if ownsUserDocument(userId) &&
+          documentIdMatchesData(imageId) &&
+          userIdMatchesData(userId);
+      }
+
+      match /fertilizerRecommendations/{recommendationId} {
+        allow read, delete: if ownsUserDocument(userId);
+        allow create, update: if ownsUserDocument(userId) &&
+          documentIdMatchesData(recommendationId) &&
+          userIdMatchesData(userId);
+      }
+
+      match /irrigationRecommendations/{recommendationId} {
+        allow read, delete: if ownsUserDocument(userId);
+        allow create, update: if ownsUserDocument(userId) &&
+          documentIdMatchesData(recommendationId) &&
+          userIdMatchesData(userId);
+      }
+    }
+
+    match /cropStages/{cropName} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /marketPrices/{priceId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /schemes/{schemeId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /knowledgeBase/{entryId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

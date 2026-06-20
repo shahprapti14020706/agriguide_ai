@@ -1,0 +1,61 @@
+name: agriguide_ai
+description: AI-powered agriculture intelligence companion for farmers.
+publish_to: "none"
+
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cached_network_image: any
+  cloud_firestore: any
+  connectivity_plus: any
+  dio: any
+  equatable: any
+  firebase_analytics: any
+  firebase_auth: any
+  firebase_core: any
+  firebase_crashlytics: any
+  firebase_messaging: any
+  firebase_storage: any
+  fl_chart: any
+  flutter_dotenv: any
+  flutter_local_notifications: any
+  geocoding: any
+  geolocator: any
+  get_it: any
+  google_maps_flutter: any
+  image: any
+  image_picker: any
+  intl: any
+  lottie: any
+  package_info_plus: any
+  permission_handler: any
+  provider: any
+  shared_preferences: any
+  shimmer: any
+  tflite_flutter: any
+  url_launcher: any
+  uuid: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  fake_cloud_firestore: any
+  firebase_auth_mocks: any
+  flutter_lints: any
+  mocktail: any
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/translations/
+    - assets/models/
