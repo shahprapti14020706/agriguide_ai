@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import '../core/config/firebase_runtime.dart';
 import '../core/errors/app_exception.dart';
 
@@ -34,6 +35,7 @@ class FirestoreService {
         'id': snapshot.id,
       };
     } on FirebaseException catch (error) {
+      debugPrint('Firestore getDocument failed: path=$path code=${error.code}');
       throw _mapFirestoreException(error);
     }
   }
@@ -58,6 +60,7 @@ class FirestoreService {
           )
           .toList(growable: false);
     } on FirebaseException catch (error) {
+      debugPrint('Firestore getCollection failed: path=$path code=${error.code}');
       throw _mapFirestoreException(error);
     }
   }

@@ -35,9 +35,11 @@ class AuthProvider extends BaseProvider {
   AuthUserModel? _currentUser;
   String? _successMessage;
 
-  AuthUserModel? get currentUser => _currentUser;
+  AuthUserModel? get currentUser => FirebaseRuntime.isAvailable
+      ? _authRepository.currentUser
+      : _currentUser;
   String? get successMessage => _successMessage;
-  bool get isAuthenticated => _currentUser != null;
+  bool get isAuthenticated => currentUser != null;
   bool get onboardingComplete =>
       _localStorageService.getBool(_onboardingCompleteKey) ?? false;
 
@@ -46,14 +48,14 @@ class AuthProvider extends BaseProvider {
 
     try {
       _currentUser = FirebaseRuntime.isAvailable
-          ? _authRepository.currentUser
+          ? await _authRepository.authStateChanges().first
           : _readLocalUser();
       await _syncFirebaseUserState(_currentUser);
       setSuccess();
     } catch (error) {
-      _currentUser = _readLocalUser();
-      await _syncFirebaseUserState(_currentUser);
-      setSuccess();
+      // A cached profile is not a Firebase-authenticated session.
+      _currentUser = null;
+      setFailure(error);
     }
   }
 

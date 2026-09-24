@@ -32,25 +32,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
 
     _requestedLoad = true;
-    final user = context.read<AuthProvider>().currentUser;
-    if (user != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await context.read<CropProvider>().loadCrops(user.id);
-        if (mounted) {
-          await context.read<DashboardProvider>().loadDashboard(
-                user.id,
-                language: context.read<LanguageProvider>().language,
-              );
-        }
-      });
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      // Also restore authentication when /dashboard is opened directly.
+      await context.read<AuthProvider>().initialize();
+      if (mounted) await _refresh();
+    });
   }
 
-  Future<void> _refresh(String userId) async {
-    await context.read<CropProvider>().loadCrops(userId);
+  Future<void> _refresh() async {
+    final user = context.read<AuthProvider>().currentUser;
+    if (user == null) {
+      Navigator.of(context).pushReplacementNamed(RouteNames.login);
+      return;
+    }
+    await context.read<CropProvider>().loadCrops(user.id);
     if (mounted) {
       await context.read<DashboardProvider>().loadDashboard(
-            userId,
+            user.id,
             language: context.read<LanguageProvider>().language,
           );
     }
@@ -106,7 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   }
 
                   return RefreshIndicator(
-                    onRefresh: () => _refresh(user.id),
+                    onRefresh: _refresh,
                     child: ListView(
                       padding: const EdgeInsets.all(16),
                       children: [
